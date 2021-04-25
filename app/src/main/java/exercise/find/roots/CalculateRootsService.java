@@ -3,9 +3,12 @@ package exercise.find.roots;
 import android.app.IntentService;
 import android.content.Intent;
 import android.util.Log;
+import android.util.Pair;
+
 
 public class CalculateRootsService extends IntentService {
 
+  public static final int TWENTY_SECOND_IN_MILLI_SEC = 20000;
 
   public CalculateRootsService() {
     super("CalculateRootsService");
@@ -20,6 +23,7 @@ public class CalculateRootsService extends IntentService {
       Log.e("CalculateRootsService", "can't calculate roots for non-positive input" + numberToCalculateRootsFor);
       return;
     }
+
     /*
     TODO:
      calculate the roots.
@@ -41,5 +45,25 @@ public class CalculateRootsService extends IntentService {
        for input "829851628752296034247307144300617649465159", after 20 seconds give up
 
      */
+  }
+
+  Pair<Long, Long> calculateFactors(long number) {
+    long startTime = System.currentTimeMillis();
+    // if the number is even then 2 is a factor
+    if (number % 2 == 0)
+      return new Pair<>((long)2 ,number / 2);
+    // number is odd
+    int firstFactor = 0;
+    long numberSqr = (long) Math.sqrt(number);
+
+    for(long i = 3; i <= numberSqr; i = i + 2) {
+      // if we passed 20 second then return null
+      if (System.currentTimeMillis() - startTime >= TWENTY_SECOND_IN_MILLI_SEC)
+        return null;
+
+      if (number % i == 0)
+        return new Pair<>(i, number / i);
+        }
+    return new Pair<>((long)1, number);
   }
 }
