@@ -8,7 +8,7 @@ import android.util.Pair;
 
 public class CalculateRootsService extends IntentService {
 
-  public static final int TWENTY_SECOND_IN_MILLI_SEC = 20000;
+  public static final int TIME_UN_TILL_GIVE_UP_MILLI_SEC = 20000;
 
   public CalculateRootsService() {
     super("CalculateRootsService");
@@ -23,6 +23,24 @@ public class CalculateRootsService extends IntentService {
       Log.e("CalculateRootsService", "can't calculate roots for non-positive input" + numberToCalculateRootsFor);
       return;
     }
+
+    Intent newIntent = new Intent();
+
+    try {
+      Pair<Long, Long> factors = calculateFactors(numberToCalculateRootsFor);
+      newIntent.setAction("found_roots");
+      newIntent.putExtra("original_number", numberToCalculateRootsFor);
+      newIntent.putExtra("root1", factors.first);
+      newIntent.putExtra("root2", factors.second);
+    }
+    catch (ToMuchTimeToComputeException e) {
+      newIntent.setAction("stopped_calculations");
+      newIntent.putExtra("original_number", numberToCalculateRootsFor);
+      newIntent.putExtra("time_until_give_up_seconds", TIME_UN_TILL_GIVE_UP_MILLI_SEC / 1000);
+    }
+
+    sendBroadcast(newIntent);
+
 
     /*
     TODO:
@@ -47,23 +65,30 @@ public class CalculateRootsService extends IntentService {
      */
   }
 
-  Pair<Long, Long> calculateFactors(long number) {
+  /**
+   * This method calculate one pair of factors of a given number.
+   * @param number - the number.
+   * @return the factors.
+   * @throws ToMuchTimeToComputeException - if we pass 20 sec of calculation throw an exception.
+   */
+  Pair<Long, Long> calculateFactors(long number) throws ToMuchTimeToComputeException {
     long startTime = System.currentTimeMillis();
     // if the number is even then 2 is a factor
     if (number % 2 == 0)
       return new Pair<>((long)2 ,number / 2);
+
     // number is odd
     int firstFactor = 0;
     long numberSqr = (long) Math.sqrt(number);
 
     for(long i = 3; i <= numberSqr; i = i + 2) {
       // if we passed 20 second then return null
-      if (System.currentTimeMillis() - startTime >= TWENTY_SECOND_IN_MILLI_SEC)
-        return null;
+      if (System.currentTimeMillis() - startTime >= TIME_UN_TILL_GIVE_UP_MILLI_SEC)
+        throw new ToMuchTimeToComputeException();
 
       if (number % i == 0)
         return new Pair<>(i, number / i);
         }
-    return new Pair<>((long)1, number);
+    return new Pair<>(number, (long)1);
   }
 }

@@ -19,6 +19,9 @@ public class MainActivity extends AppCompatActivity {
 
   private BroadcastReceiver broadcastReceiverForSuccess = null;
   // TODO: add any other fields to the activity as you want
+  
+  /* marks if we are currently waiting for a result calculation. */
+  private boolean waitingForResult = false;
 
 
   @Override
@@ -44,6 +47,14 @@ public class MainActivity extends AppCompatActivity {
         // text did change
         String newText = editTextUserInput.getText().toString();
         // todo: check conditions to decide if button should be enabled/disabled (see spec below)
+
+        if (!isPositiveLong(newText)) {
+          buttonCalculateRoots.setEnabled(false);
+        }
+        else {
+          // if we are waiting for result unable the button.
+          buttonCalculateRoots.setEnabled(!waitingForResult);
+        }
       }
     });
 
@@ -52,10 +63,19 @@ public class MainActivity extends AppCompatActivity {
       Intent intentToOpenService = new Intent(MainActivity.this, CalculateRootsService.class);
       String userInputString = editTextUserInput.getText().toString();
       // todo: check that `userInputString` is a number. handle bad input. convert `userInputString` to long
-      long userInputLong = 0; // todo this should be the converted string from the user
-      intentToOpenService.putExtra("number_for_service", userInputLong);
-      startService(intentToOpenService);
-      // todo: set views states according to the spec (below)
+      if (!isPositiveLong(userInputString)) {
+        long userInputLong = Long.parseLong(userInputString); // todo this should be the converted string from the user
+        intentToOpenService.putExtra("number_for_service", userInputLong);
+        startService(intentToOpenService);
+        // todo: set views states according to the spec (below)
+        progressBar.setVisibility(View.VISIBLE);
+        buttonCalculateRoots.setEnabled(false);
+        editTextUserInput.setEnabled(false);
+      }
+      else {
+        buttonCalculateRoots.setEnabled(false);
+        progressBar.setVisibility(View.GONE);
+      }
     });
 
     // register a broadcast-receiver to handle action "found_roots"
@@ -71,8 +91,23 @@ public class MainActivity extends AppCompatActivity {
            - when creating an intent to open the new-activity, pass the roots as extras to the new-activity intent
              (see for example how did we pass an extra when starting the calculation-service)
          */
+        editTextUserInput.setText(""); // cleanup text in edit-text
+        editTextUserInput.setEnabled(true); // set edit-text as enabled (user can input text)
+        buttonCalculateRoots.setEnabled(false); // set button as disabled (user can't click)
+        Intent intentSuccessScreen = new Intent(MainActivity.this, SuccessScreenActivity.class);
+
+        long serviceNumber = incomingIntent.getLongExtra("original_number", 0);
+        long firstRoot =  incomingIntent.getLongExtra("root1", 0);
+        long secondRoot =  incomingIntent.getLongExtra("root2", 0);
+
+        intentSuccessScreen.putExtra("original_number", serviceNumber);
+        intentSuccessScreen.putExtra("root1", firstRoot);
+        intentSuccessScreen.putExtra("root2", secondRoot);
+
+        startActivity(intentSuccessScreen);
       }
     };
+
     registerReceiver(broadcastReceiverForSuccess, new IntentFilter("found_roots"));
 
     /*
@@ -100,6 +135,18 @@ public class MainActivity extends AppCompatActivity {
   protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
     super.onRestoreInstanceState(savedInstanceState);
     // TODO: load data from bundle and set screen state (see spec below)
+  }
+
+  public static boolean isPositiveLong(String s) {
+    return isPositiveLong(s,10);
+  }
+
+  public static boolean isPositiveLong(String s, int radix) {
+    if(s.isEmpty()) return false;
+    for(int i = 0; i < s.length(); i++) {
+      if(Character.digit(s.charAt(i),radix) < 0) return false;
+    }
+    return true;
   }
 }
 
