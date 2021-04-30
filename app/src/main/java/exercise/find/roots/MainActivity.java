@@ -7,6 +7,7 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -63,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
       Intent intentToOpenService = new Intent(MainActivity.this, CalculateRootsService.class);
       String userInputString = editTextUserInput.getText().toString();
       // todo: check that `userInputString` is a number. handle bad input. convert `userInputString` to long
-      if (!isPositiveLong(userInputString)) {
+      if (isPositiveLong(userInputString)) {
         long userInputLong = Long.parseLong(userInputString); // todo this should be the converted string from the user
         intentToOpenService.putExtra("number_for_service", userInputLong);
         startService(intentToOpenService);
@@ -82,7 +83,10 @@ public class MainActivity extends AppCompatActivity {
     broadcastReceiverForSuccess = new BroadcastReceiver() {
       @Override
       public void onReceive(Context context, Intent incomingIntent) {
-        if (incomingIntent == null || !incomingIntent.getAction().equals("found_roots")) return;
+        if (incomingIntent == null || !incomingIntent.getAction().equals("found_roots")) {
+          Log.e("intent_is_null", "null");
+          return;
+        }
         // success finding roots!
         /*
          TODO: handle "roots-found" as defined in the spec (below).
@@ -91,18 +95,23 @@ public class MainActivity extends AppCompatActivity {
            - when creating an intent to open the new-activity, pass the roots as extras to the new-activity intent
              (see for example how did we pass an extra when starting the calculation-service)
          */
-        editTextUserInput.setText(""); // cleanup text in edit-text
         editTextUserInput.setEnabled(true); // set edit-text as enabled (user can input text)
         buttonCalculateRoots.setEnabled(false); // set button as disabled (user can't click)
+        progressBar.setVisibility(View.GONE); // there is no calculation in the BG.
+
         Intent intentSuccessScreen = new Intent(MainActivity.this, SuccessScreenActivity.class);
 
         long serviceNumber = incomingIntent.getLongExtra("original_number", 0);
         long firstRoot =  incomingIntent.getLongExtra("root1", 0);
         long secondRoot =  incomingIntent.getLongExtra("root2", 0);
+        long calcTime = incomingIntent.getLongExtra("calculation_time_in_seconds", 0);
 
         intentSuccessScreen.putExtra("original_number", serviceNumber);
         intentSuccessScreen.putExtra("root1", firstRoot);
         intentSuccessScreen.putExtra("root2", secondRoot);
+        intentSuccessScreen.putExtra("calculation_time_in_seconds", calcTime);
+
+        Log.e("success_in_receiving", "roots are received ");
 
         startActivity(intentSuccessScreen);
       }

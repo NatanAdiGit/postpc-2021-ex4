@@ -2,51 +2,39 @@ package exercise.find.roots;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Button;
+import android.widget.TextView;
 
 public class SuccessScreenActivity extends AppCompatActivity {
-
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        displayAlert();
-    }
+        setContentView(R.layout.activity_success_screen);
 
-    private void displayAlert()
-    {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setInverseBackgroundForced(true);
+        TextView originalNumberTextView = findViewById(R.id.originalNumberTextView);
+        TextView factorsTextView = findViewById(R.id.factorsTextView);
+        TextView timeToComputeTextView = findViewById(R.id.timeToComputeTextView);
+        Button okButton = findViewById(R.id.buttonOk);
 
         Intent initialCreateMe = getIntent();
-        long originalNumber = initialCreateMe.getLongExtra("original_number", 0);
-        long firstRoot =  initialCreateMe.getLongExtra("root1", 0);
-        long secondRoot =  initialCreateMe.getLongExtra("root2", 0);
-        long calcTime =  initialCreateMe.getLongExtra("root2", 0);
+        String originalNumber = Long.toString(initialCreateMe.getLongExtra("original_number", 0));
+        String firstRoot =  Long.toString(initialCreateMe.getLongExtra("root1", 0));
+        String secondRoot =  Long.toString(initialCreateMe.getLongExtra("root2", 0));
+        String calcTime =  Long.toString(initialCreateMe.getLongExtra("calculation_time_in_seconds", -1));
+
+        originalNumberTextView.setText(originalNumber);
+        factorsTextView.setText(originalNumber + "=" + firstRoot + "*" + secondRoot);
+        timeToComputeTextView.setText(calcTime);
+
+        okButton.setOnClickListener(v -> {
+            originalNumberTextView.setText("");
+            factorsTextView.setText("");
+            timeToComputeTextView.setText("");
+            finish();
+        });
+//
 
 
-        builder.setMessage(Long.toString(originalNumber) + '=' +
-                Long.toString(firstRoot) + '*' + Long.toString(secondRoot) + '\n' +
-                "calculation time: " + calcTime + "seconds" ).setCancelable(
-                false).setPositiveButton("OK",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-
-                        // code here
-                        SuccessScreenActivity.this.finish();
-                        dialog.cancel();
-                    }
-                }).setNegativeButton("Close",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-
-                        SuccessScreenActivity.this.finish();
-                        dialog.cancel();
-                    }
-                });
-        AlertDialog alert = builder.create();
-        alert.show();
     }
 }

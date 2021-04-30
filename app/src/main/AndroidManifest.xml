@@ -10,6 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FindRoots">
         <activity android:name=".SuccessScreenActivity"></activity>
+        <activity android:name=".SuccessScreenActivity1" />
 
         <service
             android:name=".CalculateRootsService"

@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">FindRoots</string>
+    <string name="we_found_some_factors_for_you">We found some factors for you!</string>
+    <string name="the_original_number_is">the original number is:</string>
+    <string name="the_factors_are">the factors are:</string>
+    <string name="the_time_in_second_to_compute">the time in second to compute</string>
 </resources>

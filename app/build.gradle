@@ -43,3 +43,10 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     testImplementation 'org.robolectric:robolectric:4.5.1'
 }
+
+//preBuild {
+//    doFirst {
+//        JavaCompile jc = android.applicationVariants.find { it.name == 'debug' }.javaCompile
+//        jc.options.compilerArgs = ["-Xlint"]
+//    }
+//}

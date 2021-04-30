@@ -24,23 +24,27 @@ public class CalculateRootsService extends IntentService {
       return;
     }
 
-    Intent newIntent = new Intent();
-
     try {
+      Intent rootsIntent = new Intent();
+      long startTime = System.currentTimeMillis();
       Pair<Long, Long> factors = calculateFactors(numberToCalculateRootsFor);
-      newIntent.setAction("found_roots");
-      newIntent.putExtra("original_number", numberToCalculateRootsFor);
-      newIntent.putExtra("root1", factors.first);
-      newIntent.putExtra("root2", factors.second);
+      long calcTime =  (System.currentTimeMillis() - startTime)/ 1000;
+      rootsIntent.setAction("found_roots");
+      rootsIntent.putExtra("original_number", numberToCalculateRootsFor);
+      rootsIntent.putExtra("root1", factors.first);
+      rootsIntent.putExtra("root2", factors.second);
+      rootsIntent.putExtra("calculation_time_in_seconds", calcTime);
+      Log.e("success_roots", "roots are " + factors.first + " " + factors.second);
+      sendBroadcast(rootsIntent);
     }
     catch (ToMuchTimeToComputeException e) {
-      newIntent.setAction("stopped_calculations");
-      newIntent.putExtra("original_number", numberToCalculateRootsFor);
-      newIntent.putExtra("time_until_give_up_seconds", TIME_UN_TILL_GIVE_UP_MILLI_SEC / 1000);
+      Intent timeLimitIntent = new Intent();
+      intent.setAction("stopped_calculations");
+      intent.putExtra("original_number", numberToCalculateRootsFor);
+      intent.putExtra("time_until_give_up_seconds", TIME_UN_TILL_GIVE_UP_MILLI_SEC / 1000);
+      Log.e("Too_much_time", "20 seconds passed for calculation");
+      sendBroadcast(timeLimitIntent);
     }
-
-    sendBroadcast(newIntent);
-
 
     /*
     TODO:
