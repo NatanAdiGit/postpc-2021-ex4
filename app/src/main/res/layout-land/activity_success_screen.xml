@@ -14,9 +14,8 @@
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:text="@string/we_found_some_factors_for_you"
-        android:textSize="25sp"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="20dp" />
+        android:textSize="22sp"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/theOriginalNumberIsTextView"
@@ -24,9 +23,9 @@
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:text="@string/the_original_number_is"
-        android:textSize="22sp"
+        android:textSize="17sp"
         app:layout_constraintTop_toBottomOf="@id/greetTextView"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="10dp"
         />
 
     <TextView
@@ -35,9 +34,9 @@
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:text=""
-        android:textSize="30sp"
+        android:textSize="22sp"
         app:layout_constraintTop_toBottomOf="@id/theOriginalNumberIsTextView"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="5dp"
         />
 
     <TextView
@@ -46,9 +45,9 @@
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:text="@string/the_factors_are"
-        android:textSize="22sp"
+        android:textSize="17sp"
         app:layout_constraintTop_toBottomOf="@id/originalNumberTextView"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="12dp"
         />
 
     <TextView
@@ -57,9 +56,9 @@
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:text=""
-        android:textSize="27sp"
+        android:textSize="22sp"
         app:layout_constraintTop_toBottomOf="@id/theFactorsAreTextView"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="5dp"
         />
 
     <TextView
@@ -68,9 +67,9 @@
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:text="@string/the_time_in_second_to_compute"
-        android:textSize="22sp"
+        android:textSize="17sp"
         app:layout_constraintTop_toBottomOf="@id/factorsTextView"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="12dp"
         />
 
     <TextView
@@ -79,24 +78,24 @@
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:text=""
-        android:textSize="27sp"
+        android:textSize="22sp"
         app:layout_constraintTop_toBottomOf="@id/theTimeInSecToComputeTextView"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="5dp"
         />
 
 
     <Button
         android:id="@+id/buttonOk"
-        android:layout_width="100dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@color/cardview_dark_background"
         android:gravity="center_horizontal"
         android:text="OK"
-        android:textSize="27sp"
+        android:textSize="18sp"
         tools:ignore="MissingConstraints"
         app:layout_constraintTop_toBottomOf="@id/timeToComputeTextView"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginStart="155dp"
-        android:layout_marginTop="50dp" />
+        android:layout_marginStart="370dp"
+        android:layout_marginTop="8dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

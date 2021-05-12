@@ -39,9 +39,9 @@ public class CalculateRootsService extends IntentService {
     }
     catch (ToMuchTimeToComputeException e) {
       Intent timeLimitIntent = new Intent();
-      intent.setAction("stopped_calculations");
-      intent.putExtra("original_number", numberToCalculateRootsFor);
-      intent.putExtra("time_until_give_up_seconds", TIME_UN_TILL_GIVE_UP_MILLI_SEC / 1000);
+      timeLimitIntent.setAction("stopped_calculations");
+      timeLimitIntent.putExtra("original_number", numberToCalculateRootsFor);
+      timeLimitIntent.putExtra("time_until_give_up_seconds", TIME_UN_TILL_GIVE_UP_MILLI_SEC / 1000);
       Log.e("Too_much_time", "20 seconds passed for calculation");
       sendBroadcast(timeLimitIntent);
     }

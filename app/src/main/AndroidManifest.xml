@@ -9,9 +9,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.FindRoots">
-        <activity android:name=".SuccessScreenActivity"></activity>
-        <activity android:name=".SuccessScreenActivity1" />
-
+        <activity android:name=".SuccessScreenActivity"/>
         <service
             android:name=".CalculateRootsService"
             android:exported="false" />

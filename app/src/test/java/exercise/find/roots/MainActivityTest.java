@@ -1,7 +1,11 @@
 package exercise.find.roots;
 
+import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.os.Looper;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 
 import junit.framework.TestCase;
 
@@ -9,6 +13,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
+import org.robolectric.RuntimeEnvironment;
+import org.robolectric.Shadows;
 import org.robolectric.annotation.Config;
 
 @RunWith(RobolectricTestRunner.class)
@@ -46,7 +52,38 @@ public class MainActivityTest extends TestCase {
     Button button = mainActivity.findViewById(R.id.buttonCalculateRoots);
 
     // test: insert input to the edit text and verify that the button is enabled
-    // TODO: implement
+    inputEditText.setText("1000000000000001");
+    assertTrue(button.isEnabled());
+  }
+
+  @Test
+  public void when_userEnterGoodInput_thenTheProgressBarShouldBeVisible(){
+    // create a MainActivity and let it think it's currently displayed on the screen
+    MainActivity mainActivity = Robolectric.buildActivity(MainActivity.class).create().visible().get();
+
+    // find the edit-text and the button
+    EditText inputEditText = mainActivity.findViewById(R.id.editTextInputNumber);
+    Button button = mainActivity.findViewById(R.id.buttonCalculateRoots);
+    ProgressBar progressBar = mainActivity.findViewById(R.id.progressBar);
+
+    inputEditText.setText("1000000000000001");
+    button.performClick();
+
+    assertTrue(progressBar.isShown());
+  }
+
+  @Test
+  public void when_userIsEnteringBadNumberInput_then_theButtonShouldBeUnable(){
+    // create a MainActivity and let it think it's currently displayed on the screen
+    MainActivity mainActivity = Robolectric.buildActivity(MainActivity.class).create().visible().get();
+
+    // find the edit-text and the button
+    EditText inputEditText = mainActivity.findViewById(R.id.editTextInputNumber);
+    Button button = mainActivity.findViewById(R.id.buttonCalculateRoots);
+
+    // test: insert bed input ao the button will be unable.
+    inputEditText.setText("17.333");
+    assertFalse(button.isEnabled());
   }
 
   // TODO: add 1 or 2 more unit tests to the activity. so your "writing tests" skill won't get rusty.
