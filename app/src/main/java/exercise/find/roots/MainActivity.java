@@ -17,6 +17,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.math.BigInteger;
+
 public class MainActivity extends AppCompatActivity {
 
   public static final String ABORT_CAL_MESS = "calculation aborted after 20 seconds";
@@ -228,7 +230,10 @@ public class MainActivity extends AppCompatActivity {
     for(int i = 0; i < s.length(); i++) {
       if(Character.digit(s.charAt(i),radix) < 0) return false;
     }
-    return true;
+
+    // check that the number is no longer then the max long.
+    BigInteger bigInt = new BigInteger(s);
+    return (bigInt.compareTo(BigInteger.valueOf(Long.MAX_VALUE)) <= 0);
   }
 }
 
